@@ -29,7 +29,10 @@
     ]
   },
   "nyc": {
-    "exclude": ["**/__tests__", "lib"]
+    "exclude": [
+      "**/__tests__",
+      "lib"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -38,12 +41,15 @@
     ],
     "plugins": [
       "ava"
-    ]
+    ],
+    "parser": "babel-eslint"
   },
   "devDependencies": {
     "ava": "^0.14.0",
     "babel": "^6.5.2",
     "babel-cli": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "eslint": "^2.10.2",
     "eslint-config-airbnb-base": "^3.0.1",

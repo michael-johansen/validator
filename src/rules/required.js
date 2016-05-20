@@ -1,4 +1,6 @@
-export function required(field, value, options = true) {
+/* @flow */
+
+export function required(field:string, value:any, options:bool = true) {
   if (options === false) { return null; }
   let result = false;
   if (typeof value === 'string') {

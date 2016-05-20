@@ -1,7 +1,8 @@
+/* @flow */
 import { get, isNil } from 'lodash';
 import { isInt, isFloat } from 'validator';
 
-export function numeric(field, value, options) {
+export function numeric(field:string, value:any, options: { [key:string]:any }) {
   if (!value && parseInt(value, 10) !== 0) {
     return null;
   }

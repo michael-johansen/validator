@@ -1,10 +1,11 @@
+/* @flow */
 import freeze from 'deep-freeze';
 import { assign, keys, omit } from 'lodash';
 
 import * as rules from './rules';
 
 export default class Validator {
-  constructor(config) {
+  constructor(config:{ [key:string]:any }) {
     if (!config) { throw new Error('Missing validator configuration'); }
     this.config = config;
     this.errors = {};
@@ -14,12 +15,12 @@ export default class Validator {
     return freeze(this.errors);
   }
 
-  validate(fields, data) {
+  validate(fields:Array<string>, data:{ [key:string]:any }) {
     fields.map(field => this.validateField(field, data[field]));
     return freeze(this.errors);
   }
 
-  validateField(field, value) {
+  validateField(field:string, value:any) {
     let result = null;
     if (this.config.hasOwnProperty(field)) {
       const fieldRules = keys(this.config[field]);
@@ -41,7 +42,7 @@ export default class Validator {
     return result;
   }
 
-  validateRule(ruleName, field, value, options) {
+  validateRule(ruleName:string, field:string, value:any, options:{ [key:string]:any }) {
     return rules[ruleName](field, value, options);
   }
 }

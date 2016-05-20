@@ -1,0 +1,9 @@
+[ignore]
+.*/node_modules/conventional-changelog.*
+
+[include]
+
+[libs]
+./interface.js
+
+[options]
