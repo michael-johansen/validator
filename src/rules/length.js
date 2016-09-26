@@ -1,5 +1,14 @@
 import { get, isNil } from 'lodash';
 
+import type { IfCheck } from '../validator';
+
+export type LengthConfig = {
+  if?: IfCheck,
+  min?: number,
+  max?: number,
+  exact?: number,
+}
+
 export default function length(field, value, options) {
   const min = get(options, 'min');
   const max = get(options, 'max');

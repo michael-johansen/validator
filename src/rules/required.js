@@ -1,5 +1,9 @@
 import { isArray, isEmpty, isString, isNumber, isBoolean } from 'lodash';
 
+import type { IfCheck } from '../validator';
+
+export type RequiredConfig = boolean | { if: IfCheck }
+
 export default function required(field, value) {
   let result = false;
 

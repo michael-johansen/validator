@@ -1,6 +1,16 @@
-
 import { get, isArray, isNil, isObject, reduce } from 'lodash';
 import { isFloat } from 'validator';
+
+import type { IfCheck } from '../validator';
+
+export type NumericConfig = {
+  if?: IfCheck,
+  exact?: string,
+  min?: number | {field: string},
+  max?: number | {field: string},
+}
+
+
 
 function evaluateMin(value, min) {
   if (isNil(min) || min === '') {

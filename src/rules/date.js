@@ -1,6 +1,17 @@
 import { get } from 'lodash';
 import moment from 'moment';
 
+import type { IfCheck } from '../validator';
+
+export type DateConfig = {
+  if?: IfCheck,
+  format: string,
+  past?: boolean,
+  future?: boolean,
+  min?: string,
+  max?: string,
+}
+
 export default function date(field, value, options) {
   const format = get(options, 'format', moment.ISO_8601);
   if (!moment(value, format, true).isValid()) {

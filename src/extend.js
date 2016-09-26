@@ -1,3 +1,4 @@
+/* @flow */
 import { assign } from 'lodash';
 
 import Validator from './validator';

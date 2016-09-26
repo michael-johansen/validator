@@ -1,3 +1,4 @@
+/* @flow */
 import freeze from 'deep-freeze';
 import {
   assign,
@@ -18,6 +19,45 @@ import {
 
 import * as rules from './rules';
 import { UnknownRuleError } from './errors';
+import type { AgeByDateConfig } from './rules/ageByDate';
+import type { ArrayOfConfig } from './rules/arrayOf';
+import type { DateConfig } from './rules/date';
+import type { LengthConfig } from './rules/length';
+import type { NumericConfig } from './rules/numeric';
+import type { RegexpConfig } from './rules/regex';
+import type { RequiredConfig } from './rules/required';
+
+export type IfCheck = (fields: {[key: string]: mixed}) => boolean
+
+export type RuleConfig = boolean | {
+  if?: IfCheck,
+  [key: string]: mixed,
+}
+
+export type FieldConfig = {
+  ageByDate?: AgeByDateConfig,
+  arrayOf?: ArrayOfConfig,
+  date?: DateConfig,
+  length?: LengthConfig,
+  numeric?: NumericConfig,
+  regex?: RegexpConfig,
+  required?: RequiredConfig,
+  [rule: string]: RuleConfig,
+}
+
+export type ValidatorConfig = {
+  [field: string]: FieldConfig,
+}
+
+export type ValidatorError = {
+   field: string,
+   rule: string,
+   value: mixed,
+   config: {[key: string]: mixed},
+}
+
+export type ValidatorErrors = { [field: string]: ValidatorError }
+
 
 function createError(field, error, value, config) {
   if (isArray(error)) {
@@ -31,7 +71,10 @@ function createError(field, error, value, config) {
 }
 
 export default class Validator {
-  constructor(config) {
+  config: ValidatorConfig;
+  errors: ValidatorErrors;
+
+  constructor(config: ValidatorConfig) {
     if (!config) { throw new Error('Missing validator configuration'); }
     this.config = freeze(config);
     this.errors = {};
@@ -41,13 +84,13 @@ export default class Validator {
     return freeze(this.errors);
   }
 
-  validate(fields, data) {
+  validate(fields: Array<string>, data: {[key: string]: mixed}) {
     this.errors = {};
     map(fields, field => this.validateField(field, get(data, field), data));
     return freeze(this.errors);
   }
 
-  validateMultiple(fields, data) {
+  validateMultiple(fields: Array<string>, data: {[key: string]: mixed}) {
     return reduce(keys(data), (lastValue, key) => assign(
       {},
       lastValue,
@@ -55,7 +98,7 @@ export default class Validator {
     ), {});
   }
 
-  validateField(field, value, values = {}) {
+  validateField(field: string, value: mixed, values: {[key: string]: mixed} = {}) {
     let error = null;
     if (this.hasRulesForField(field)) {
       error = this.validateRule('required', field, value, { values, force: true });

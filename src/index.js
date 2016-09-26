@@ -1,3 +1,4 @@
+/* @flow */
 module.exports.__esModule = true; // eslint-disable-line no-underscore-dangle
 
 module.exports.default = require('./validator').default;
