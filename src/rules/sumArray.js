@@ -20,7 +20,6 @@ export default function sumArray(field, value, options) {
   if (!isArray(value)) {
     return 'sumArray';
   }
-
   const number = reduce(
     value,
     (lastValue, item) => lastValue + parseFloat(isObject(item) ? item[options.field] : item),
