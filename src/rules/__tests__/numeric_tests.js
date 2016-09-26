@@ -1,25 +1,26 @@
+/* @flow */
 import test from 'ava';
 
 import numeric from '../numeric';
 
-test('numeric should return null for integer values', t => {
-  t.is(numeric('field', 0), null);
-  t.is(numeric('field', 42), null);
-  t.is(numeric('field', '42'), null);
+test('numeric should return null for integer values', (t) => {
+  t.is(numeric('field', 0, {}), null);
+  t.is(numeric('field', 42, {}), null);
+  t.is(numeric('field', '42', {}), null);
 });
 
-test('numeric should return null for double values', t => {
-  t.is(numeric('field', 4.2), null);
-  t.is(numeric('field', '4.2'), null);
+test('numeric should return null for double values', (t) => {
+  t.is(numeric('field', 4.2, {}), null);
+  t.is(numeric('field', '4.2', {}), null);
 });
 
-test('numeric should return null for integer values when integerOnly is true', t => {
+test('numeric should return null for integer values when integerOnly is true', (t) => {
   t.is(numeric('field', 0, { integerOnly: true }), null);
   t.is(numeric('field', 42, { integerOnly: true }), null);
   t.is(numeric('field', '42', { integerOnly: true }), null);
 });
 
-test('numeric should validate non-integer values when limits are non-integers', t => {
+test('numeric should validate non-integer values when limits are non-integers', (t) => {
   t.is(numeric('field', 0.0, { integerOnly: false, min: 0, max: 0.4 }), null);
   t.is(numeric('field', 42.5, { integerOnly: false, min: 42.1, max: 42.8 }), null);
   t.is(numeric('field', '42.5', { integerOnly: false, min: 42.1, max: 42.8 }), null);
@@ -28,25 +29,25 @@ test('numeric should validate non-integer values when limits are non-integers', 
 
 test(
   'numeric should return "numeric.integerOnly" for non-integer values when integerOnly is true',
-  t => {
+  (t) => {
     t.is(numeric('field', 42.2, { integerOnly: true }), 'numeric.integerOnly');
     t.is(numeric('field', '42.3', { integerOnly: true }), 'numeric.integerOnly');
   }
 );
 
-test('numeric should return null for double values with custom delimiter', t => {
+test('numeric should return null for double values with custom delimiter', (t) => {
   t.is(numeric('field', '4,2', { delimiter: ',' }), null);
 });
 
-test('numeric should return "numeric" letters', t => {
-  t.is(numeric('field', 'not a number'), 'numeric');
+test('numeric should return "numeric" letters', (t) => {
+  t.is(numeric('field', 'not a number', {}), 'numeric');
 });
 
-test('numeric should return "numeric" for spaces', t => {
-  t.is(numeric('field', '  '), 'numeric');
+test('numeric should return "numeric" for spaces', (t) => {
+  t.is(numeric('field', '  ', {}), 'numeric');
 });
 
-test('numeric should validate max value', t => {
+test('numeric should validate max value', (t) => {
   t.is(numeric('field', 0, { max: 0 }), null);
   t.is(numeric('field', 41, { max: 42 }), null);
   t.is(numeric('field', 42, { max: 42 }), null);
@@ -56,7 +57,7 @@ test('numeric should validate max value', t => {
   t.is(numeric('field', '43', { max: 42 }), 'numeric.max');
 });
 
-test('numeric should validate min value', t => {
+test('numeric should validate min value', (t) => {
   t.is(numeric('field', 0, { min: 0 }), null);
   t.is(numeric('field', 43, { min: 42 }), null);
   t.is(numeric('field', 42, { min: 42 }), null);
@@ -66,7 +67,7 @@ test('numeric should validate min value', t => {
   t.is(numeric('field', '41', { min: 42 }), 'numeric.min');
 });
 
-test('numeric should validate max value when set by other field', t => {
+test('numeric should validate max value when set by other field', (t) => {
   t.is(numeric('field', 2, { max: { field: 'a' }, values: {} }), null);
   t.is(numeric('field', 2, { max: { field: 'a' }, values: { a: '' } }), null);
   t.is(numeric('field', 2, { max: { field: 'a' }, values: { a: null } }), null);
@@ -78,7 +79,7 @@ test('numeric should validate max value when set by other field', t => {
 });
 
 
-test('numeric should validate min value when set by other field', t => {
+test('numeric should validate min value when set by other field', (t) => {
   t.is(numeric('field', 2, { min: { field: 'a' }, values: {} }), null);
   t.is(numeric('field', 2, { min: { field: 'a' }, values: { a: '' } }), null);
   t.is(numeric('field', 2, { min: { field: 'a' }, values: { a: null } }), null);

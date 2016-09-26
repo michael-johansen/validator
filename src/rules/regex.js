@@ -1,5 +1,4 @@
-import { isString } from 'lodash';
-
+/* @flow */
 import type { IfCheck } from '../validator';
 
 export type RegexpConfig = {
@@ -7,9 +6,8 @@ export type RegexpConfig = {
   pattern: string | RegExp,
 }
 
-
-export default function regex(field, value, options) {
-  const pattern = isString(options.pattern) ? new RegExp(options.pattern) : options.pattern;
+export default function regex(field: string, value: string, options: RegexpConfig) {
+  const pattern: RegExp = typeof options.pattern === 'string' ? new RegExp(options.pattern) : options.pattern;
 
   if (!pattern.test(value)) {
     return 'regex';

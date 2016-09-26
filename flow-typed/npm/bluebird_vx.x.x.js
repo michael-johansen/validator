@@ -175,4 +175,3 @@ declare module 'bluebird/js/release/using' {
 declare module 'bluebird/js/release/util' {
   declare module.exports: any;
 }
-

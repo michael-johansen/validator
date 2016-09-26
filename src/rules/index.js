@@ -1,6 +1,7 @@
 /* @flow */
 export type RuleOptions = {[key: string]: mixed};
-export type ValidatorRule = (field: string, value: mixed, options: RuleOptions) => ?string
+export type ValidatorRule = (field: string, value: any, options: RuleOptions) => ?string
+
 
 export { default as ageByDate } from './ageByDate';
 export { default as arrayOf } from './arrayOf';

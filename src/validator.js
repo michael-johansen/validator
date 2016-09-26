@@ -19,13 +19,15 @@ import {
 
 import * as rules from './rules';
 import { UnknownRuleError } from './errors';
+import type { RuleOptions, ValidatorRule } from './rules';
 import type { AgeByDateConfig } from './rules/ageByDate';
-import type { ArrayOfConfig } from './rules/arrayOf';
 import type { DateConfig } from './rules/date';
 import type { LengthConfig } from './rules/length';
 import type { NumericConfig } from './rules/numeric';
 import type { RegexpConfig } from './rules/regex';
 import type { RequiredConfig } from './rules/required';
+import type { SumArrayConfig } from './rules/sumArray';
+
 
 export type IfCheck = (fields: {[key: string]: mixed}) => boolean
 
@@ -36,12 +38,13 @@ export type RuleConfig = boolean | {
 
 export type FieldConfig = {
   ageByDate?: AgeByDateConfig,
-  arrayOf?: ArrayOfConfig,
+  arrayOf?: ValidatorConfig, // eslint-disable-line no-use-before-define
   date?: DateConfig,
   length?: LengthConfig,
   numeric?: NumericConfig,
   regex?: RegexpConfig,
   required?: RequiredConfig,
+  sumArray?: SumArrayConfig,
   [rule: string]: RuleConfig,
 }
 
@@ -62,7 +65,7 @@ export type ValidatorErrors = { [field: string]: ValidatorError }
 function createError(field, error, value, config) {
   if (isArray(error)) {
     return flatten(map(error, (nestedError, i) =>
-      map(keys(nestedError), (key) =>
+      map(keys(nestedError), key =>
         createError(`${field}[${i}].${key}`,
           nestedError[key].rule, nestedError[key].value, nestedError[key].config)))
     );
@@ -73,6 +76,7 @@ function createError(field, error, value, config) {
 export default class Validator {
   config: ValidatorConfig;
   errors: ValidatorErrors;
+  static rules: {[key: string]: ValidatorRule};
 
   constructor(config: ValidatorConfig) {
     if (!config) { throw new Error('Missing validator configuration'); }
@@ -138,7 +142,7 @@ export default class Validator {
     return error;
   }
 
-  validateRule(ruleName, field, value, options) {
+  validateRule(ruleName: string, field: string, value: any, options: RuleOptions) {
     if (!options.force && !this.evaluateIf(field, ruleName, options)) {
       return null;
     }
@@ -156,7 +160,7 @@ export default class Validator {
     return error;
   }
 
-  evaluateIf(field, ruleName, options = {}) {
+  evaluateIf(field: string, ruleName: string, options: RuleOptions = {}) {
     const ruleConfig = this.getRuleConfig(field, ruleName);
 
     if (isUndefined(ruleConfig)) {
@@ -175,15 +179,15 @@ export default class Validator {
     return true;
   }
 
-  hasRulesForField(field) {
+  hasRulesForField(field: string) {
     return this.config.hasOwnProperty(field);
   }
 
-  getRuleConfig(field, ruleName) {
+  getRuleConfig(field: string, ruleName: string) {
     return get(this.config[field], ruleName);
   }
 
-  removeError(field) {
+  removeError(field: string) {
     if (this.errors.hasOwnProperty(field)) {
       this.errors = omit(this.errors, field);
     }

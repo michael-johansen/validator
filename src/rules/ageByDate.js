@@ -1,16 +1,17 @@
+/* @flow */
 import { get, isNil } from 'lodash';
 import moment from 'moment';
 
 import type { IfCheck } from '../validator';
 
 export type AgeByDateConfig = {
-    if?: IfCheck,
-    min?: number,
-    max?: number,
-    exact?: number,
-  }
+  if?: IfCheck,
+  min?: number,
+  max?: number,
+  exact?: number,
+}
 
-export default function ageByDate(field, value, options) {
+export default function ageByDate(field: string, value: string, options: any) {
   let min = get(options, 'min');
   let max = get(options, 'max');
 

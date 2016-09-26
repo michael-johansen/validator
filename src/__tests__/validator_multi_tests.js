@@ -2,7 +2,7 @@ import test from 'ava';
 
 import Validator from '../validator';
 
-test('Validator.validateMultiple should validate multiple data sets', t => {
+test('Validator.validateMultiple should validate multiple data sets', (t) => {
   const config = { a: { required: true, numeric: { min: 200 } } };
   const validator = new Validator(config);
   const data = {

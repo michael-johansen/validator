@@ -2,7 +2,7 @@ import test from 'ava';
 
 import Validator from '../validator';
 
-test('Validator should validate required rules', t => {
+test('Validator should validate required rules', (t) => {
   const validator = new Validator({
     noValue: { required: true },
     present: { required: true },

@@ -1,16 +1,10 @@
+/* @flow */
 import { keys, map, omit } from 'lodash';
 import Validator from '../validator';
 
-import type { IfCheck } from '../validator';
+import type { ValidatorConfig } from '../validator';
 
-
-export type ArrayOfConfig = {
-  if?: IfCheck,
-  [field: string]: FieldConfig,
-}
-
-
-export default function arrayOf(field, value, options) {
+export default function arrayOf(field: string, value: mixed, options: ValidatorConfig) {
   const validator = new Validator(options);
   return map(value, item => validator.validate(keys(omit(options, 'values')), item));
 }

@@ -1,3 +1,4 @@
+/* @flow */
 import { get } from 'lodash';
 import moment from 'moment';
 
@@ -12,7 +13,7 @@ export type DateConfig = {
   max?: string,
 }
 
-export default function date(field, value, options) {
+export default function date(field: string, value: string, options: DateConfig) {
   const format = get(options, 'format', moment.ISO_8601);
   if (!moment(value, format, true).isValid()) {
     return 'date.format';

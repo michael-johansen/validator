@@ -1,3 +1,4 @@
+/* @flow */
 import { get, isNil, isObject } from 'lodash';
 import { isInt, isFloat } from 'validator';
 
@@ -8,7 +9,9 @@ export type NumericConfig = {
   if?: IfCheck,
   delimiter?: string,
   integerOnly?: boolean,
+  // $FlowTodo
   min?: number | {field: string},
+  // $FlowTodo
   max?: number | {field: string},
 }
 
@@ -27,9 +30,9 @@ function evaluateMax(value, max) {
   return !isFloat(value.toString(), { max: parseFloat(max) });
 }
 
-export default function numeric(field, value, options) {
+export default function numeric(field: string, value: string | number, options: NumericConfig) {
   const delimiter = get(options, 'delimiter');
-  const number = delimiter ? value.replace(delimiter, '.') : value;
+  const number = delimiter ? value.toString().replace(delimiter, '.') : value;
 
   if (!isFloat(number.toString())) {
     return 'numeric';
@@ -44,10 +47,8 @@ export default function numeric(field, value, options) {
     if (min.field && evaluateMin(number, get(options, `values.${min.field}`))) {
       return 'numeric.min.field';
     }
-  } else {
-    if (evaluateMin(number, min)) {
-      return 'numeric.min';
-    }
+  } else if (evaluateMin(number, min)) {
+    return 'numeric.min';
   }
 
   const max = get(options, 'max');
@@ -55,10 +56,8 @@ export default function numeric(field, value, options) {
     if (max.field && evaluateMax(number, get(options, `values.${max.field}`))) {
       return 'numeric.max.field';
     }
-  } else {
-    if (evaluateMax(number, max)) {
-      return 'numeric.max';
-    }
+  } else if (evaluateMax(number, max)) {
+    return 'numeric.max';
   }
 
   return null;

@@ -5,14 +5,14 @@ import Validator from '../validator';
 import extend from '../extend';
 import * as rules from '../rules';
 
-test('should export Validator', t => {
+test('should export Validator', (t) => {
   t.is(require('../index').Validator, Validator);
 });
 
-test('should export extender', t => {
+test('should export extender', (t) => {
   t.is(require('../index').extend, extend);
 });
 
-test('should export rules', t => {
+test('should export rules', (t) => {
   t.is(require('../index').rules, rules);
 });
